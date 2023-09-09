@@ -1,0 +1,15 @@
+aiohttp
+sqlalchemy
+openrouteservice
+fastapi
+pydantic
+numpy
+pandas
+scikit-learn
+uvicorn
+python-jose
+envparse
+asyncpg
+implicit
+python-multipart
+starlette
