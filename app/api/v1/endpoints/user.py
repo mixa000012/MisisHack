@@ -11,7 +11,7 @@ from app.core.deps import get_db
 from app.user import service
 from app.user.auth import get_current_user_from_token
 from app.user.schema import TokenData
-from app.user.schema import User
+from app.user.schema import UserShow, User
 from app.user.schema import UserCreate
 from app.user.schema import UserUpdateData
 from app.user.service import UserAlreadyExist

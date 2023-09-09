@@ -6,7 +6,7 @@ from jose import JWTError
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 from starlette import status
-
+from utils.hashing import Hasher
 from app.core.deps import get_db
 from app.user.model import User
 from utils import settings
@@ -25,12 +25,12 @@ async def get_current_user_from_token(
         payload = jwt.decode(
             token, settings.SECRET_KEY, algorithms=[settings.ALGORITHM]
         )
-        id: int = int(payload.get("sub"))
+        id = (payload.get("sub"))
         if id is None:
             raise credentials_exception
     except JWTError:
         raise credentials_exception
-    user = await db.execute(select(User).where(User.id == id))
+    user = await db.execute(select(User).where(User.user_id == id))
     user = user.scalar()
     if user is None:
         raise credentials_exception
@@ -38,10 +38,10 @@ async def get_current_user_from_token(
 
 
 async def auth_user(email: str, password: str, db: AsyncSession) -> None | User:
-    user = await db.execute(
-        select(User).where(User.email == email, User.passwrod == password)
-    )
+    user = await db.execute(select(User).where(User.email == email))
     user = user.scalar()
     if not user:
+        return
+    if not Hasher.verify_password(password, user.password):
         return
     return user

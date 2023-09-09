@@ -2,7 +2,7 @@ from datetime import datetime
 from sqlalchemy import Column
 from sqlalchemy import DateTime
 import uuid
-from sqlalchemy import String
+from sqlalchemy import String, ARRAY
 from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.sql import func
 
@@ -15,3 +15,13 @@ class User(Base):
     email = Column(String, nullable=False, unique=True, index=True)
     created_at = Column(DateTime(timezone=True), default=func.now())
     password = Column(String, nullable=False)
+    fio = Column(String, default=None)
+    tg = Column(String, default=None)
+    github = Column(String, default=None)
+    course = Column(String, default=None)
+    institute = Column(String, default=None)
+    direction = Column(String, default=None)
+    group = Column(String, default=None)
+    role = Column(ARRAY(String), default=None)
+    skills = Column(ARRAY(String), default=None)
+    description = Column(String, default=None)
