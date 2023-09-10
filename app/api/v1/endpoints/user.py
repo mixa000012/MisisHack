@@ -101,5 +101,5 @@ async def revoke_admin_privilege(
 
 @router.get('/')
 async def get_user(db: AsyncSession = Depends(get_db),
-                   current_user: User = Depends(get_current_user_from_token)) -> User:
+                   current_user: User = Depends(get_current_user_from_token)) -> UserShow:
     return await service.get_user(db, current_user)
