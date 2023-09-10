@@ -23,9 +23,3 @@ class Teams(Base):
 
     def __init__(self, title):
         self.title = title
-
-    def add_user(self, user):
-        if len(self.users) < 5:
-            self.users.append(user)
-        else:
-            raise Exception("The team is full.")

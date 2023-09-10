@@ -22,8 +22,10 @@ class NewsWithoutTag(BaseModel):
     start_of_registration: datetime
     end_of_registration: datetime
     tags: List[Tag_schema] = []
+
     class Config:
         orm_mode = True
+
 
 class News(BaseModel):
     title: str
@@ -43,6 +45,7 @@ class NewsUpdate(News):
 
 class NewsCreate(News):
     pass
+
 
 class ShowNews(NewsWithoutTag):
     pass
