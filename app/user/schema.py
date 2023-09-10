@@ -74,3 +74,22 @@ class UserShow(BaseModel):
 class TokenData(BaseModel):
     access_token: str
     token_type: str
+
+
+class UserFull(BaseModel):
+    user_id: uuid.UUID
+    email: EmailStr
+    fio: str | None
+    tg: str | None
+    github: str | None
+    course: str | None
+    institute: str | None
+    direction: str | None
+    group: str | None
+    role: list[str] | None
+    skills: list[str] | None
+    description: str | None
+
+    class Config:
+        orm_mode = True
+

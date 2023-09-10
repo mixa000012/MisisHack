@@ -12,7 +12,7 @@ from app.core.deps import get_db
 from app.user import service
 from app.user.auth import get_current_user_from_token
 from app.user.schema import TokenData
-from app.user.schema import UserShow, User_
+from app.user.schema import UserShow, User_, UserFull
 from app.user.schema import UserBase
 from app.user.schema import UserUpdateData
 from app.user.service import UserAlreadyExist
@@ -101,5 +101,5 @@ async def revoke_admin_privilege(
 
 @router.get('/')
 async def get_user(db: AsyncSession = Depends(get_db),
-                   current_user: User = Depends(get_current_user_from_token)) -> UserShow:
+                   current_user: User = Depends(get_current_user_from_token)) -> UserFull:
     return await service.get_user(db, current_user)
