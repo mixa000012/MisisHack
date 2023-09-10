@@ -9,7 +9,7 @@ class Settings(BaseSettings):
     API_V1_STR: str = "/api/v1"
     SECRET_KEY: str = secrets.token_urlsafe(32)
 
-    PROJECT_NAME: str = "lct_hack"
+    PROJECT_NAME: str = "Misis_hack"
 
     PG_SERVER: str = "localhost"
     PG_PORT: int = 5432

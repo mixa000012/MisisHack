@@ -5,13 +5,19 @@ import re
 from pydantic.main import BaseModel
 
 
+class PortalRole(str, Enum):
+    ROLE_PORTAL_USER = "ROLE_PORTAL_USER"
+    ROLE_PORTAL_ADMIN = "ROLE_PORTAL_ADMIN"
+    ROLE_PORTAL_SUPERADMIN = "ROLE_PORTAL_SUPERADMIN"
+
+
 class UserBase(BaseModel):
     email: EmailStr
     password: str
 
 
 class UserCreate(UserBase):
-    pass
+    roles: list[PortalRole]
 
 
 class UserUpdateData(BaseModel):
@@ -49,7 +55,7 @@ class UserUpdateData(BaseModel):
         return value
 
 
-class User(UserUpdateData):
+class User_(UserUpdateData):
     user_id: uuid.UUID
     email: EmailStr
 

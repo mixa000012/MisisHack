@@ -4,7 +4,6 @@ from app.core.db.CRUD import ModelAccessor
 from app.user.model import User
 from app.user.schema import UserCreate, UserUpdateData
 
-
 class UserAccessor(ModelAccessor[User, UserCreate, UserUpdateData]):
     async def get_by_email(self, email, db: AsyncSession):
         user = await db.execute(
