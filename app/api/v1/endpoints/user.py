@@ -97,3 +97,9 @@ async def revoke_admin_privilege(
     except IntegrityError as err:
         raise HTTPException(status_code=503, detail=f"Database error: {err}")
     return updated_user
+
+
+@router.get('/')
+async def get_user(db: AsyncSession = Depends(get_db),
+                   current_user: User = Depends(get_current_user_from_token)) -> User:
+    return await service.get_user(db, current_user)

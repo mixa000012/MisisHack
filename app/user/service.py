@@ -195,3 +195,8 @@ async def revoke_admin_privilege(
     except Exception as ex:
         print(ex)
     return updated_user
+
+
+async def get_user(db: AsyncSession = Depends(get_db),
+                   current_user: User = Depends(get_current_user_from_token)):
+    return await store.user.get(db, current_user.user_id)
