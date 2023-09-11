@@ -11,7 +11,13 @@ class Teams(BaseModel):
 
 
 class TeamsCreate(Teams):
-    pass
+    class Config:
+        orm_mode = True
+
+
+class TeamsExpand(Teams):
+    id: uuid.UUID
+    user_id: list[uuid.UUID]
 
 
 class TeamsUpdate(Teams):

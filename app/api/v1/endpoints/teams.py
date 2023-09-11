@@ -1,3 +1,4 @@
+import uuid
 from random import randint
 from uuid import UUID
 from fastapi import Body
@@ -18,13 +19,13 @@ from app.user.schema import UserUpdateData
 from app.user.service import UserAlreadyExist
 from app.user.service import UserDoesntExist
 from app.user.model import User
-from app.teams.schema import TeamsCreate
+from app.teams.schema import TeamsCreate, TeamsExpand
 
 router = APIRouter()
 
 
 @router.post('/')
-async def create_team(user_ids: list[str], team_name: str, db: AsyncSession = Depends(get_db),
+async def create_team(user_ids: list[uuid.UUID], team_name: str, db: AsyncSession = Depends(get_db),
                       current_user: User = Depends(get_current_user_from_token)):
     return await service.create_team(team_name, user_ids, db, current_user)
 
@@ -35,12 +36,23 @@ async def get_users(team_id: str, db: AsyncSession = Depends(get_db)):
 
 
 @router.post('/add')
-async def add_member(user_id: str, team_id: str, db: AsyncSession = Depends(get_db),
+async def add_member(user_id: uuid.UUID, team_id: uuid.UUID, db: AsyncSession = Depends(get_db),
                      current_user: User = Depends(get_current_user_from_token)):
-    return await service.add_member(user_id, team_id, db, current_user)
+    try:
+        return await service.add_member(user_id, team_id, db, current_user)
+    except Exception:
+        raise HTTPException(status_code=404, detail="User or team not found")
 
 
 @router.delete('/')
 async def delete_member(user_id: str, db: AsyncSession = Depends(get_db),
                         current_user: User = Depends(get_current_user_from_token)):
-    return await service.delete_member(user_id, db, current_user)
+    try:
+        return await service.delete_member(user_id, db, current_user)
+    except ValueError:
+        raise HTTPException(status_code=404, detail="User or team not found")
+
+
+@router.get('/all')
+async def get_multi(skip: int, limit: int, db: AsyncSession = Depends(get_db)) -> list[TeamsExpand]:
+    return await service.get_multi(db=db, skip=skip, limit=limit)

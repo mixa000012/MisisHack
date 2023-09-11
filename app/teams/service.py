@@ -1,3 +1,5 @@
+import uuid
+
 from fastapi import Depends, Query
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -24,7 +26,7 @@ async def create(obj_in: TeamsCreate, db: AsyncSession = Depends(get_db),
 
 async def create_team(
         team_name: str,
-        user_ids: list[str] = Query(..., description="List of user IDs to add to the team"),
+        user_ids: list[uuid.UUID] = Query(..., description="List of user IDs to add to the team"),
         db: AsyncSession = Depends(get_db), current_user: User = Depends(get_current_user_from_token)
 ):
     try:
@@ -72,7 +74,7 @@ async def get_users_from_team(team_id: str, db: AsyncSession = Depends(get_db)):
     return {"team_id": team.id, "team_title": team.title, "users": [user.email for user in users]}
 
 
-async def add_member(user_id: str, team_id: str, db: AsyncSession = Depends(get_db),
+async def add_member(user_id: uuid.UUID, team_id: uuid.UUID, db: AsyncSession = Depends(get_db),
                      current_user: User = Depends(get_current_user_from_token)):
     if current_user.is_admin or current_user.is_superadmin:
         user = await db.execute(select(User).options(selectinload(User.team)).where(User.user_id == user_id))
@@ -114,6 +116,10 @@ async def delete_member(user_id: str, db: AsyncSession = Depends(get_db),
         # Commit the changes to the database
         await db.commit()
 
-        return {"message": "User added to the team successfully"}
+        return {"message": "User deleted from the team successfully"}
     else:
         raise HTTPException(status_code=403, detail="Forbidden.")
+
+
+async def get_multi(skip, limit, db: AsyncSession = Depends(get_db)):
+    return await store.teams.get_multi(db=db, skip=skip, limit=limit)
