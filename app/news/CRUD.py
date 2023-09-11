@@ -7,6 +7,7 @@ from app.news.schema import NewsCreate
 from app.news.schema import NewsUpdate, NewsWithoutTag, Tag_schema
 from app.core.db.CRUD import ModelAccessor
 from sqlalchemy.dialects import postgresql
+import os
 
 
 class TagDoesntExist(Exception):
@@ -25,9 +26,23 @@ class NewsAccessor(ModelAccessor[News, NewsCreate, NewsUpdate]):
         return results.scalars().all()
 
     async def create_news(self, db: AsyncSession, obj_in: NewsCreate):
-        news = NewsCreate(title=obj_in.title, description=obj_in.description, image=obj_in.image,
+        image_dir = 'images/'  # Replace with your desired directory path
+
+        # Create the directory if it doesn't exist
+        os.makedirs(image_dir, exist_ok=True)
+
+        # Generate a unique filename (e.g., using the user's ID)
+        filename = f'user_{obj_in.image.filename}'
+
+        # Define the full file path
+        file_path = os.path.join(image_dir, filename)
+        news = NewsCreate(title=obj_in.title, description=obj_in.description, image=file_path,
                           start_of_registration=obj_in.start_of_registration,
                           end_of_registration=obj_in.end_of_registration, news_tags=[])
+        # Save the image to the file system
+        with open(file_path, 'wb') as image_file:
+            image_file.write(obj_in.image.file.read())
+
         for tag_name in obj_in.news_tags:
             tag = await db.execute(select(Tag).where(Tag.name == tag_name))
             tag = tag.scalar()

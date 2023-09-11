@@ -1,4 +1,4 @@
-from fastapi import Depends
+from fastapi import Depends, UploadFile
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select, and_
 
@@ -46,3 +46,15 @@ async def create_tag(tag_name: str, db: AsyncSession = Depends(get_db),
 
 async def get_multi_tags(skip: int, limit: int, db: AsyncSession = Depends(get_db)):
     return await store.news.get_multi_tags(skip=skip, limit=limit, db=db)
+
+
+async def save_user_image(image: UploadFile, db: AsyncSession = Depends(get_db)):
+    # Define the directory where you want to store user images
+
+    # Store the file path in the database
+    user_image = UserImage(user_id=user_id, file_path=file_path)
+    db.add(user_image)
+    await db.commit()
+    db.refresh(user_image)
+
+    return user_image

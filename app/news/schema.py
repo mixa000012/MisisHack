@@ -1,3 +1,4 @@
+from fastapi import UploadFile
 from pydantic.main import BaseModel
 from app.news.model import EventTags
 from datetime import datetime
@@ -30,7 +31,7 @@ class NewsWithoutTag(BaseModel):
 class News(BaseModel):
     title: str
     description: str
-    image: str
+    image: UploadFile | str
     start_of_registration: datetime
     end_of_registration: datetime
     news_tags: List[str]
