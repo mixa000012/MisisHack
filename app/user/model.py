@@ -2,7 +2,7 @@ from enum import Enum
 from sqlalchemy import Column, ForeignKey
 from sqlalchemy import DateTime
 import uuid
-from sqlalchemy import String, ARRAY
+from sqlalchemy import String, ARRAY, Integer
 from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.orm import relationship
 from sqlalchemy.sql import func
@@ -33,6 +33,7 @@ class User(Base):
     skills = Column(ARRAY(String), default=None)
     description = Column(String, default=None)
     roles = Column(ARRAY(String))
+    score = Column(Integer)
 
     team_id = Column(UUID(as_uuid=True), ForeignKey("teams.id"))
     # Добавляем отношение к команде

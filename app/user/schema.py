@@ -90,6 +90,7 @@ class UserFull(BaseModel):
     skills: list[str] | None
     description: str | None
     roles: list[str]
+    score: int | None
 
     class Config:
         orm_mode = True

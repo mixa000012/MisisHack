@@ -103,3 +103,11 @@ async def revoke_admin_privilege(
 async def get_user(db: AsyncSession = Depends(get_db),
                    current_user: User = Depends(get_current_user_from_token)) -> UserFull:
     return await service.get_user(db, current_user)
+
+
+@router.put("/score")
+async def update_score(
+        current_user: User = Depends(get_current_user_from_token)
+) :
+    updated_user = await service.update_user_ml(current_user)
+    return updated_user

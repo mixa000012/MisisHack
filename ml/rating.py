@@ -6,7 +6,7 @@ import pickle
 from gensim.models import Word2Vec
 from nltk.corpus import stopwords
 
-ROOT_PATH = ''
+ROOT_PATH = 'ml/'
 
 pca = pickle.load(open(ROOT_PATH + "pca.pkl",'rb'))
 kmeans = pickle.load(open(ROOT_PATH + "knn.pkl",'rb'))
@@ -88,7 +88,7 @@ class Model:
                 best_spec = i
         return (best_spec, max_value)
 
-    def get_predictions(self, df: dict):
+    async def get_predictions(self, df: dict):
         '''
         df: в df должны лежать столбцы text - стэк юзера и spec - выбранные направления
         return: возвращает примерный уровень юзера (3 - самый хуевый, 0 - средне-низкий, 2 - средний, 1 - пиздатый)

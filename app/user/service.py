@@ -1,6 +1,8 @@
 from enum import Enum
 from datetime import timedelta
 from uuid import UUID
+
+import pandas as pd
 from fastapi import Body
 from fastapi import Depends
 from fastapi import HTTPException
@@ -18,6 +20,8 @@ from utils import settings
 from utils.security import create_access_token
 from utils.hashing import Hasher
 from app.user.model import User
+
+from ml.rating import rating_system
 
 
 class UserDoesntExist(Exception):
@@ -200,3 +204,18 @@ async def revoke_admin_privilege(
 async def get_user(db: AsyncSession = Depends(get_db),
                    current_user: User = Depends(get_current_user_from_token)):
     return await store.user.get(db, current_user.user_id)
+
+
+async def update_user_ml(
+        current_user: User = Depends(get_current_user_from_token)
+) :
+    dct = {'spec': current_user.role,
+           'text': ' '.join(current_user.skills)}
+    df = pd.DataFrame({'spec': current_user.role,
+           'text': ' '.join(current_user.skills)})
+    print(dct)
+    score = await rating_system.get_predictions(df)
+    print(score)
+    current_user.score = int(score[0][0])
+
+    return int(score[0][0])

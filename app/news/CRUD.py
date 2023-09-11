@@ -34,7 +34,7 @@ class NewsAccessor(ModelAccessor[News, NewsCreate, NewsUpdate]):
         os.makedirs(image_dir, exist_ok=True)
 
         # Generate a unique filename (e.g., using the user's ID)
-        filename = f'image_{uuid.uuid4()}'
+        filename = f'image_{uuid.uuid4()}.png'
 
         # Define the full file path
         file_path = os.path.join(image_dir, filename)
