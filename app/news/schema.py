@@ -31,7 +31,7 @@ class NewsWithoutTag(BaseModel):
 class News(BaseModel):
     title: str
     description: str
-    image: UploadFile | str
+    image: str
     start_of_registration: datetime
     end_of_registration: datetime
     news_tags: List[str]

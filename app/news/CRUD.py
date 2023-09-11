@@ -34,16 +34,17 @@ class NewsAccessor(ModelAccessor[News, NewsCreate, NewsUpdate]):
         os.makedirs(image_dir, exist_ok=True)
 
         # Generate a unique filename (e.g., using the user's ID)
-        filename = f'user_{uuid.uuid4()}'
+        filename = f'image_{uuid.uuid4()}'
 
         # Define the full file path
         file_path = os.path.join(image_dir, filename)
+        # Save the image to the file system
+        image_data = bytes(obj_in.image)
+        with open(file_path, 'wb') as image_file:
+            image_file.write(image_data)
         news = NewsCreate(title=obj_in.title, description=obj_in.description, image=file_path,
                           start_of_registration=obj_in.start_of_registration,
                           end_of_registration=obj_in.end_of_registration, news_tags=[])
-        # Save the image to the file system
-        with open(file_path, 'wb') as image_file:
-            image_file.write(obj_in.image)
 
         for tag_name in obj_in.news_tags:
             tag = await db.execute(select(Tag).where(Tag.name == tag_name))
