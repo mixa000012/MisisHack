@@ -15,7 +15,7 @@ from app.core.middlewares import (
     ExceptionMiddleware,
     LogMiddleware,
 )
-
+from starlette.middleware.cors import CORSMiddleware
 
 middleware = [
     Middleware(RawContextMiddleware),
@@ -29,10 +29,17 @@ app = FastAPI(
     debug=settings.DEBUG,
     middleware=middleware,
 )
+origins = ["*"]
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 app.include_router(api_router, prefix=settings.API_V1_STR)
 
 app_monit = FastAPI()
-
 
 logger = logging.getLogger()
 
@@ -57,6 +64,7 @@ async def init() -> None:
     except Exception as e:
         logger.error(e)
         raise e
+
 
 if __name__ == "__main__":
     uvicorn.run(app, host="127.0.0.1", port=8000)
