@@ -43,7 +43,7 @@ class NewsAccessor(ModelAccessor[News, NewsCreate, NewsUpdate]):
                           end_of_registration=obj_in.end_of_registration, news_tags=[])
         # Save the image to the file system
         with open(file_path, 'wb') as image_file:
-            image_file.write(obj_in.image.file.read())
+            image_file.write(obj_in.image)
 
         for tag_name in obj_in.news_tags:
             tag = await db.execute(select(Tag).where(Tag.name == tag_name))
