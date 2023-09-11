@@ -16,6 +16,7 @@ from app.core.middlewares import (
     LogMiddleware,
 )
 from starlette.middleware.cors import CORSMiddleware
+from fastapi.staticfiles import StaticFiles
 
 middleware = [
     Middleware(RawContextMiddleware),
@@ -42,6 +43,7 @@ app.include_router(api_router, prefix=settings.API_V1_STR)
 app_monit = FastAPI()
 
 logger = logging.getLogger()
+app.mount("/images", StaticFiles(directory="images"), name="images")
 
 
 @app.on_event("startup")
