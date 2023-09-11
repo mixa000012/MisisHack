@@ -1,3 +1,5 @@
+import uuid
+
 from sqlalchemy import select, any_, all_
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import selectinload
@@ -32,7 +34,7 @@ class NewsAccessor(ModelAccessor[News, NewsCreate, NewsUpdate]):
         os.makedirs(image_dir, exist_ok=True)
 
         # Generate a unique filename (e.g., using the user's ID)
-        filename = f'user_{obj_in.image.filename}'
+        filename = f'user_{uuid.uuid4()}'
 
         # Define the full file path
         file_path = os.path.join(image_dir, filename)
