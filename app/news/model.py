@@ -53,6 +53,6 @@ class Tag(Base):
     __tablename__ = 'tags'
 
     id = Column(Integer, primary_key=True, index=True)
-    name = Column(String)
+    name = Column(String, unique=True)
 
     news_ = relationship('News', secondary=news_tags, backref='tags', lazy='noload')

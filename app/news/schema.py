@@ -33,7 +33,7 @@ class News(BaseModel):
     image: str
     start_of_registration: datetime
     end_of_registration: datetime
-    news_tags: List[int]
+    news_tags: List[str]
 
     class Config:
         orm_mode = True
@@ -49,3 +49,6 @@ class NewsCreate(News):
 
 class ShowNews(NewsWithoutTag):
     pass
+
+class TagShow(Tag_schema):
+    id: int
